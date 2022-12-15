@@ -114,6 +114,66 @@ yarn mint \
 SBT with tokenId 123 was minted for address 0xeaeF3D4964F40924D3082CFcB6F7E1d9Fe5D299B
 ```
 
+## Deploy KYC
+
+To deploy KYC smart contract to test SBT. An account has passed KYC if hold the SBT.
+
+```
+Hardhat version 2.10.1
+
+Usage: hardhat [GLOBAL OPTIONS] deployKYC --issuer <STRING>
+
+OPTIONS:
+
+  --issuer      The smart contract address of the issuer 
+
+deployKYC: Deploy KYC
+
+For global options help run: hardhat help
+```
+
+### Example
+
+```
+npx hardhat deployKYC \
+    --issuer 0xd65C849d9ADf21bc83cD8dEC377C4f0181dEcE6B\
+    --network localhost
+```
+
+### Output
+
+```
+KYC was deployed to ganache network and can be interacted with at address 0xb8B5C76014275A209D4967649ad060FC41fbac18
+```
+
+## Test KYC
+
+The function `inc` can be invoked by account has passed KYC.
+
+```
+Hardhat version 2.10.1
+
+Usage: hardhat [GLOBAL OPTIONS] inc --address <STRING> --signer <STRING>
+
+OPTIONS:
+
+  --address     Address of deployed KYC 
+  --signer      The signer of transaction 
+
+inc: Invoking inc function of smart contract KYC
+
+For global options help run: hardhat help
+```
+
+### Example
+
+```
+npx hardhat inc \
+    --address 0xb8B5C76014275A209D4967649ad060FC41fbac18 \
+		--signer 0xeaeF3D4964F40924D3082CFcB6F7E1d9Fe5D299B \
+    --network localhost
+```
+
 ## Run test
 
 Before running test, make sure you compile your smart contracts.
