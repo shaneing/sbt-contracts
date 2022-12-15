@@ -65,6 +65,17 @@ task('deploy', 'Deploy SBT')
     )
   })
 
+task('deployKYC', 'Deploy KYC')
+  .addParam('issuer', 'The smart contract address of the issuer')
+  .setAction(async (args, hre) => {
+    const kycContract = await hre.ethers.getContractFactory('KYC')
+    const kyc = await kycContract.deploy(args.issuer)
+    await kyc.deployed()
+    console.log(
+      `KYC was deployed to ${hre.network.name} network and can be interacted with at address ${kyc.address}`
+    )
+  })
+
 task('mint', 'Mint SBT')
   .addParam('address', 'Address of deployed SBT')
   .addParam('to', 'Address receiving SBT token')
@@ -76,5 +87,42 @@ task('mint', 'Mint SBT')
     console.log(tx)
     console.log(`SBT with tokenId ${args.tokenId} was minted for address ${args.to}`)
   })
+
+task('query', 'Query SBT')
+  .addParam('address', 'Address of deployed SBT')
+  .addParam('owner', "The owner of SBT")
+  .setAction(async (args, hre) => {
+    console.log(args)
+    const sbt = await hre.ethers.getContractAt('SBT', args.address)
+    const balance = await sbt.balanceOf(args.owner)
+    console.log(balance)
+  })
+
+task('queryOwner', 'Query SBT')
+  .addParam('address', 'Address of deployed SBT')
+  .addParam('tokenId', 'ID of SBT token that is being minted')
+  .setAction(async (args, hre) => {
+    const sbt = await hre.ethers.getContractAt('SBT', args.address)
+    const balance = await sbt.ownerOf(args.tokenId)
+    console.log(balance)
+  })
+
+task('inc', 'Invoking inc function of smart contract KYC')
+  .addParam('address', 'Address of deployed KYC')
+  .addParam('signer', 'The signer of transaction')
+  .setAction(async (args, hre) => {
+    const kyc = await hre.ethers.getContractAt('KYC', args.address)
+    const signer = await hre.ethers.getSigner(args.signer)
+    await (await kyc.connect(signer).inc()).wait()
+  })
+
+task('getCount', 'Invoking getCount function of smart contract KYC')
+  .addParam('address', 'Address of deployed KYC')
+  .setAction(async (args, hre) => {
+    const kyc = await hre.ethers.getContractAt('KYC', args.address)
+    const count = await kyc.getCount()
+    console.log(count)
+  })
+
 
 export default config
