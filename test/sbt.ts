@@ -10,6 +10,7 @@ const tokenID1 = 1
 const baseURI = 'http://localhost/'
 
 let sbt: SBT
+let issuerAccount: { address: PromiseOrValue<string> }
 let ownerAccount: { address: PromiseOrValue<string> }
 let otherAccount: { address: PromiseOrValue<string> }
 
@@ -19,7 +20,7 @@ describe('SBT', async function () {
     const sbtName = 'SBT'
     const sbtSymbol = 'SBT'
     sbt = await sbtContract.deploy(sbtName, sbtSymbol, baseURI)
-    ;[ownerAccount, otherAccount] = await ethers.getSigners()
+    ;[issuerAccount, ownerAccount, otherAccount] = await ethers.getSigners()
     await sbt.safeMint(ownerAccount.address, tokenID0)
   })
 
@@ -79,4 +80,42 @@ describe('SBT', async function () {
     const checkStatus = await sbt.supportsInterface(interfaceId)
     expect(checkStatus == true)
   })
+
+  it('#10 Check BurnAuth must be 2(Both)', async function() {
+    const burnAuth = await sbt.burnAuth(tokenID0)
+    expect(burnAuth).to.equals(2)
+  })
+
+  it('#11 revoke(uint256) from none issuer should be reverted', async function() {
+    const owner = await ethers.getSigner(ownerAccount.address.toString())
+    await expect(
+      sbt.connect(owner).revoke(tokenID0)
+    ).to.be.reverted
+  })
+
+  it('#12 burn(uint256) from issuer should be reverted', async function() {
+    const issuer = await ethers.getSigner(issuerAccount.address.toString())
+    await expect(
+      sbt.connect(issuer).burn(tokenID0)
+    ).to.be.reverted
+  })
+
+  it('#13 Should revoke(uint256) from issuer', async function() {
+    await sbt.revoke(tokenID0)
+    expect(await sbt.balanceOf(ownerAccount.address)).to.equal(0)
+    await expect(sbt.burnAuth(tokenID0)).to.be.reverted
+  })
+
+  it('#14 Should burn(uint256) from owner', async function() {
+    const owner = await ethers.getSigner(ownerAccount.address.toString())
+    await sbt.connect(owner).burn(tokenID0)
+    expect(await sbt.balanceOf(ownerAccount.address)).to.equal(0)
+    await expect(sbt.burnAuth(tokenID0)).to.be.reverted
+  })
+
+  // it('#15 issuer can not burn', async function() {
+  //   await sbt.safeMint(otherAccount.address, 1111)
+  //   await expect(sbt.burn(1111)).to.be.reverted
+  // })
+
 })
