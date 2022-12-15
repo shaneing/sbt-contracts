@@ -2,6 +2,7 @@ import { HardhatUserConfig, task } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
 import '@nomiclabs/hardhat-web3'
 import '@nomiclabs/hardhat-ethers'
+import '@nomiclabs/hardhat-ganache'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -18,6 +19,10 @@ const config: HardhatUserConfig = {
   networks: {
     localhost: {
       gas: 1_400_000
+    },
+    ganache: {
+      gas: 1_400_000,
+      url: 'http://localhost:7545'
     },
     baobab: {
       url: 'https://api.baobab.klaytn.net:8651',
