@@ -125,7 +125,7 @@ Usage: hardhat [GLOBAL OPTIONS] deployKYC --issuer <STRING>
 
 OPTIONS:
 
-  --issuer      The smart contract address of the issuer 
+  --sbt-address The smart contract address of the SBT 
 
 deployKYC: Deploy KYC
 
@@ -136,6 +136,7 @@ For global options help run: hardhat help
 
 ```
 npx hardhat deployKYC \
+    --sbt-address 0x8C6B1db16fA3c56879Fc7193be271a11De562005 \
     --issuer 0xd65C849d9ADf21bc83cD8dEC377C4f0181dEcE6B\
     --network localhost
 ```

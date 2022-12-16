@@ -2,15 +2,17 @@
 pragma solidity ^0.8.16;
 
 import "./interfaces/IERC165.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract KYC {
     uint64 private count;
-    address private issuer;
+    address private sbt;
 
-    constructor(address _issuer) {
-      issuer = _issuer;
+    constructor(address _sbt) {
+      sbt = _sbt;
     }
 
+    // Can be called by account has passed KYC
     function inc() public IsKYC(msg.sender) {
       count += 1;
     }
@@ -23,11 +25,8 @@ contract KYC {
       bool success;
       bytes memory data;
 
-      require(ERC165(issuer).supportsInterface(0xb45a3c0e), "Doesn't implement interface 0xb45a3c0e(IERC5192)");
-
-      (success, data) = issuer.staticcall(abi.encodeWithSignature("balanceOf(address)", holder));
-      require(success, "Failed to call balanceOf");
-      require(abi.decode(data, (uint256)) == 1, "No KYC");
+      require(ERC165(sbt).supportsInterface(0xb45a3c0e), "Doesn't implement interface 0xb45a3c0e(IERC5192)");
+      require(IERC721(sbt).balanceOf(holder) == 1, "No KYC");
       _;
     }
 }

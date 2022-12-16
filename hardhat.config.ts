@@ -66,10 +66,10 @@ task('deploy', 'Deploy SBT')
   })
 
 task('deployKYC', 'Deploy KYC')
-  .addParam('issuer', 'The smart contract address of the issuer')
+  .addParam('sbtAddress', 'The smart contract address of the SBT')
   .setAction(async (args, hre) => {
     const kycContract = await hre.ethers.getContractFactory('KYC')
-    const kyc = await kycContract.deploy(args.issuer)
+    const kyc = await kycContract.deploy(args.sbtAddress)
     await kyc.deployed()
     console.log(
       `KYC was deployed to ${hre.network.name} network and can be interacted with at address ${kyc.address}`
