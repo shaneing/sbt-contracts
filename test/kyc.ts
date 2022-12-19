@@ -19,7 +19,8 @@ describe('kyc', async function () {
   beforeEach(async () => {
     const sbtContract = await ethers.getContractFactory('SBT')
     const kycContract = await ethers.getContractFactory('KYC')
-    sbt = await sbtContract.deploy('SBT', 'SBT', baseURI)
+    const kycLevel = 1
+    sbt = await sbtContract.deploy('SBT', 'SBT', baseURI, 1)
     kyc = await kycContract.deploy(sbt.address)
     ;[ownerAccount, otherAccount] = await ethers.getSigners()
     await sbt.safeMint(ownerAccount.address, tokenID0)

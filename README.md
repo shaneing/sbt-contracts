@@ -52,6 +52,7 @@ Usage: hardhat [GLOBAL OPTIONS] deploy --base-uri <STRING> --name <STRING> --sym
 OPTIONS:
 
   --base-uri    URI (must end with /) that will be used as prefix when returning tokenURI
+  --level       KYC level
   --name        SBT name
   --symbol      SBT symbol
 
@@ -67,6 +68,7 @@ yarn deploy \
     --name MySBT \
     --symbol MSBT \
     --base-uri "http://localhost/" \
+    --level 1 \
     --network localhost
 ```
 

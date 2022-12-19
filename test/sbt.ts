@@ -19,8 +19,9 @@ describe('SBT', async function () {
     const sbtContract = await ethers.getContractFactory('SBT')
     const sbtName = 'SBT'
     const sbtSymbol = 'SBT'
-    sbt = await sbtContract.deploy(sbtName, sbtSymbol, baseURI)
-    ;[issuerAccount, ownerAccount, otherAccount] = await ethers.getSigners()
+    const kycLevel = 1
+    sbt = await sbtContract.deploy(sbtName, sbtSymbol, baseURI, kycLevel)
+    ;[issuerAccount, ownerAccount, otherAccount] = await ethers.getSigners() 
     await sbt.safeMint(ownerAccount.address, tokenID0)
   })
 
@@ -112,10 +113,5 @@ describe('SBT', async function () {
     expect(await sbt.balanceOf(ownerAccount.address)).to.equal(0)
     await expect(sbt.burnAuth(tokenID0)).to.be.reverted
   })
-
-  // it('#15 issuer can not burn', async function() {
-  //   await sbt.safeMint(otherAccount.address, 1111)
-  //   await expect(sbt.burn(1111)).to.be.reverted
-  // })
 
 })

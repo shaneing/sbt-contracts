@@ -56,9 +56,10 @@ task('deploy', 'Deploy SBT')
   .addParam('name', 'SBT name')
   .addParam('symbol', 'SBT symbol')
   .addParam('baseUri', 'URI (must end with /) that will be used as prefix when returning tokenURI')
+  .addParam('level', 'KYC level')
   .setAction(async (args, hre) => {
     const sbtContract = await hre.ethers.getContractFactory('SBT')
-    const sbt = await sbtContract.deploy(args.name, args.symbol, args.baseUri)
+    const sbt = await sbtContract.deploy(args.name, args.symbol, args.baseUri, args.level)
     await sbt.deployed()
     console.log(
       `SBT was deployed to ${hre.network.name} network and can be interacted with at address ${sbt.address}`

@@ -9,9 +9,15 @@ import "./interfaces/IERC5484.sol";
 
 contract SBT is ERC721, ERC721Enumerable, Ownable {
     string private baseURI;
+    uint8 private level;
 
-    constructor(string memory name_, string memory symbol_, string memory baseURI_) ERC721(name_, symbol_) {
+    constructor(string memory name_, string memory symbol_, string memory baseURI_, uint8 level_) ERC721(name_, symbol_) {
         baseURI = baseURI_;
+        level = level_;
+    }
+
+    function getLevel() public view returns (uint8) {
+      return level;
     }
 
     function _baseURI() internal view override returns (string memory) {
